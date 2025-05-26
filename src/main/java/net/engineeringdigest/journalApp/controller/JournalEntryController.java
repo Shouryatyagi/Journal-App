@@ -34,13 +34,20 @@ public class JournalEntryController {
     @GetMapping("id/{myId}")
     public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId myId){
         Optional<JournalEntry> journalEntry = journalEntryService.findById(myId);
-        return journalEntry.map(entry -> new ResponseEntity<>(entry, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if(journalEntry.isPresent()){
+            return  new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("id/{myId}")
     public ResponseEntity<Void> deleteJournalEntryById(@PathVariable ObjectId myId){
-        journalEntryService.deleteById(myId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Optional<JournalEntry> journalEntry = journalEntryService.findById(myId);
+        if(journalEntry.isPresent()) {
+            journalEntryService.deleteById(myId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/id/{id}")
@@ -49,8 +56,9 @@ public class JournalEntryController {
         if(old!=null){
             old.setTitle(newEntry.getTitle()!=null && newEntry.getTitle().isEmpty() ?old.getTitle():newEntry.getTitle());
             old.setContent(newEntry.getContent()!=null && newEntry.getContent().isEmpty() ?old.getContent():newEntry.getContent());
+            journalEntryService.saveEntry(old);
+            return new ResponseEntity<>(old, HttpStatus.CREATED);
         }
-        journalEntryService.saveEntry(old);
-        return new ResponseEntity<>(old, HttpStatus.CREATED);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }
