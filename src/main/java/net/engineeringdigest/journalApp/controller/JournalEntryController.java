@@ -22,8 +22,8 @@ public class JournalEntryController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("{username}")
-    public ResponseEntity<List<JournalEntry>> getAllJournalEntriesOfUsers(@PathVariable String username){
+    @GetMapping("{username}") // Get journal entry for specific username
+    public ResponseEntity<?> getAllJournalEntriesOfUsers(@PathVariable String username){
         User user = userService.findByUserName(username);
         List<JournalEntry> userJournalEntries = user.getJournalEntries();
         if(userJournalEntries!=null && !userJournalEntries.isEmpty()){
@@ -33,7 +33,7 @@ public class JournalEntryController {
     }
 
     @PostMapping("{username}")
-    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String username){
+    public ResponseEntity<?> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String username){
         try{
             journalEntryService.saveEntry(myEntry, username);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED) ;
@@ -41,7 +41,7 @@ public class JournalEntryController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST) ;
         }
     }
-
+// check after this line
     @GetMapping("id/{myId}")
     public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId myId){
         Optional<JournalEntry> journalEntry = journalEntryService.findById(myId);
