@@ -20,7 +20,7 @@ public class User {
     private ObjectId id;
     @Indexed(unique = true)
     @NonNull
-    private String userName;
+    private String username;
     @NonNull
     private String password;
 

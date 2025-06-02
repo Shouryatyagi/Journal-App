@@ -37,9 +37,9 @@ public class UserController {
     }
     @PutMapping("/{username}")
     public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String username){ // Update user info in db (only username and password)
-        User userInDB = userService.findByUserName(username);
+        User userInDB = userService.findByUsername(username);
         if(userInDB != null){
-            userInDB.setUserName(user.getUserName());
+            userInDB.setUsername(user.getUsername());
             userInDB.setPassword(user.getPassword());
             userService.saveEntry(userInDB);
         }else{
