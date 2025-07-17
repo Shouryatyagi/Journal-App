@@ -16,6 +16,7 @@ public class PublicController {
 
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody User user){ // Add new user in dn
+        System.out.println("create-user started");
         if(user!=null) {
             userService.saveEntry(user);
         }else {

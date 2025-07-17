@@ -38,7 +38,7 @@ public class   UserController {
     @DeleteMapping("/user")
     public ResponseEntity<?> deleteuser(@RequestBody User user){ // Update user info in db (only username and password)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        userRepository.deleteByUserName(authentication.getName());
+        userRepository.deleteByUsername(authentication.getName());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
